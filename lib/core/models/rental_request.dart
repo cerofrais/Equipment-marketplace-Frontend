@@ -7,6 +7,9 @@ class RentalRequest {
   final DateTime endDate;
   final String status;
   final DateTime createdAt;
+  final String? details;
+  final double? desiredPrice;
+  final String? reason;
 
   RentalRequest({
     required this.id,
@@ -17,6 +20,9 @@ class RentalRequest {
     required this.endDate,
     required this.status,
     required this.createdAt,
+    this.details,
+    this.desiredPrice,
+    this.reason,
   });
 
   factory RentalRequest.fromJson(Map<String, dynamic> json) {
@@ -29,6 +35,9 @@ class RentalRequest {
       endDate: DateTime.parse(json['end_date']),
       status: json['status'],
       createdAt: DateTime.parse(json['created_at']),
+      details: json['details'],
+      desiredPrice: json['desired_price'] != null ? double.tryParse(json['desired_price'].toString()) : null,
+      reason: json['reason'],
     );
   }
 }

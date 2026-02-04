@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:equip_verse/core/widgets/profile_icon_button.dart';
+import 'package:equip_verse/core/widgets/logout_icon_button.dart';
 
 class MyRentalsScreen extends StatelessWidget {
   const MyRentalsScreen({super.key});
@@ -10,6 +11,9 @@ class MyRentalsScreen extends StatelessWidget {
       appBar: AppBar(
         leading: const ProfileIconButton(),
         title: const Text('My Rentals'),
+        actions: [
+          const LogoutIconButton(),
+        ],
       ),
       body: const Center(
         child: Text('You have no rentals yet.'),

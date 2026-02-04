@@ -14,20 +14,33 @@ class RentalService {
   }
 
   Future<RentalRequest> createRentalRequest(
-      String equipmentTypeId, String zipCode, DateTime startDate, DateTime endDate) async {
+      String equipmentTypeId,
+      String zipCode,
+      DateTime startDate,
+      DateTime endDate,
+      {String? details,
+      double? desiredPrice,
+      String? reason}) async {
     final token = await _getAccessToken();
+    
+    final Map<String, dynamic> requestBody = {
+      'equipment_type_id': equipmentTypeId,
+      'zip_code': zipCode,
+      'start_date': startDate.toIso8601String(),
+      'end_date': endDate.toIso8601String(),
+    };
+    
+    if (details != null) requestBody['details'] = details;
+    if (desiredPrice != null) requestBody['desired_price'] = desiredPrice;
+    if (reason != null) requestBody['reason'] = reason;
+    
     final response = await http.post(
       Uri.parse('$_baseUrl/api/v1/rental-requests'),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',
       },
-      body: jsonEncode({
-        'equipment_type_id': equipmentTypeId,
-        'zip_code': zipCode,
-        'start_date': startDate.toIso8601String(),
-        'end_date': endDate.toIso8601String(),
-      }),
+      body: jsonEncode(requestBody),
     );
 
     if (response.statusCode == 201) {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:equip_verse/core/models/equipment.dart';
 import 'package:equip_verse/core/widgets/profile_icon_button.dart';
+import 'package:equip_verse/core/widgets/logout_icon_button.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -75,6 +76,9 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           style: const TextStyle(color: Colors.white),
         ),
+        actions: [
+          const LogoutIconButton(),
+        ],
       ),
       body: GridView.builder(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(

@@ -4,6 +4,7 @@ import 'package:equip_verse/core/services/rental_service.dart';
 import 'package:equip_verse/core/widgets/equipment_image.dart';
 import 'package:intl/intl.dart';
 import 'package:equip_verse/core/widgets/profile_icon_button.dart';
+import 'package:equip_verse/core/widgets/logout_icon_button.dart';
 
 class RentalRequestFormScreen extends StatefulWidget {
   final Equipment equipment;
@@ -101,11 +102,17 @@ class _RentalRequestFormScreenState extends State<RentalRequestFormScreen> {
     });
 
     try {
+      final desiredPrice = _desiredPriceController.text.trim().isNotEmpty
+          ? double.tryParse(_desiredPriceController.text.trim())
+          : null;
+          
       await _rentalService.createRentalRequest(
         widget.equipment.id,
         _zipCodeController.text,
         _startDate!,
         _endDate!,
+        desiredPrice: desiredPrice,
+        reason: _reasonController.text.trim(),
       );
 
       if (mounted) {
@@ -144,6 +151,9 @@ class _RentalRequestFormScreenState extends State<RentalRequestFormScreen> {
       appBar: AppBar(
         leading: const ProfileIconButton(),
         title: const Text('Rental Request'),
+        actions: [
+          const LogoutIconButton(),
+        ],
       ),
       body: SingleChildScrollView(
         child: Padding(

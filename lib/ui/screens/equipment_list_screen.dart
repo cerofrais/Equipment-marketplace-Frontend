@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:equip_verse/core/models/equipment.dart';
 import 'package:equip_verse/core/services/api_service.dart';
-import 'package:equip_verse/core/services/auth_service.dart';
 import 'package:equip_verse/core/widgets/equipment_image.dart';
 import 'package:equip_verse/features/rental/equipment_detail_screen.dart';
-import 'package:equip_verse/ui/screens/login_screen.dart';
 import 'package:equip_verse/core/widgets/profile_icon_button.dart';
+import 'package:equip_verse/core/widgets/logout_icon_button.dart';
 
 class EquipmentListScreen extends StatefulWidget {
   const EquipmentListScreen({super.key});
@@ -16,44 +15,12 @@ class EquipmentListScreen extends StatefulWidget {
 
 class _EquipmentListScreenState extends State<EquipmentListScreen> {
   final _apiService = ApiService();
-  final _authService = AuthService();
   late Future<List<Equipment>> _equipmentFuture;
 
   @override
   void initState() {
     super.initState();
     _equipmentFuture = _apiService.getEquipmentTypes();
-  }
-
-  void _logout() async {
-    // Show confirmation dialog
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Logout'),
-        content: const Text('Are you sure you want to logout?'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(context, true),
-            child: const Text('Logout'),
-          ),
-        ],
-      ),
-    );
-
-    if (confirmed == true && mounted) {
-      await _authService.logout();
-      if (mounted) {
-        Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => const LoginScreen()),
-          (route) => false,
-        );
-      }
-    }
   }
 
   @override
@@ -63,10 +30,7 @@ class _EquipmentListScreenState extends State<EquipmentListScreen> {
         leading: const ProfileIconButton(),
         title: const Text('Equipment'),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.logout),
-            onPressed: _logout,
-          ),
+          const LogoutIconButton(),
         ],
       ),
       body: FutureBuilder<List<Equipment>>(

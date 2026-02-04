@@ -7,6 +7,7 @@ import 'package:equip_verse/core/models/rental_request.dart';
 import 'package:intl/intl.dart';
 import 'package:equip_verse/ui/screens/login_screen.dart';
 import 'package:equip_verse/features/profile/rental_request_detail_screen.dart';
+import 'package:equip_verse/core/widgets/logout_icon_button.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -61,6 +62,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Profile'),
+          actions: [
+            const LogoutIconButton(),
+          ],
           bottom: const TabBar(
             tabs: [
               Tab(text: 'Details', icon: Icon(Icons.person)),
@@ -309,6 +313,39 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               ],
             ),
+            if (request.reason != null && request.reason!.isNotEmpty) ...[
+              const SizedBox(height: 4),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Icon(Icons.description, size: 14, color: Colors.grey[600]),
+                  const SizedBox(width: 4),
+                  Expanded(
+                    child: Text(
+                      request.reason!.length > 50
+                          ? '${request.reason!.substring(0, 50)}...'
+                          : request.reason!,
+                      style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+            if (request.desiredPrice != null) ...[
+              const SizedBox(height: 4),
+              Row(
+                children: [
+                  Icon(Icons.attach_money, size: 14, color: Colors.grey[600]),
+                  const SizedBox(width: 4),
+                  Text(
+                    'Budget: \$${request.desiredPrice!.toStringAsFixed(2)}',
+                    style: TextStyle(fontSize: 12, color: Colors.grey[600], fontWeight: FontWeight.w500),
+                  ),
+                ],
+              ),
+            ],
             const SizedBox(height: 8),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),

@@ -3,6 +3,7 @@ import 'package:equip_verse/core/models/equipment.dart';
 import 'package:equip_verse/features/rental/rental_request_form_screen.dart';
 import 'package:equip_verse/core/widgets/equipment_image.dart';
 import 'package:equip_verse/core/widgets/profile_icon_button.dart';
+import 'package:equip_verse/core/widgets/logout_icon_button.dart';
 
 class EquipmentDetailScreen extends StatelessWidget {
   final Equipment equipment;
@@ -15,6 +16,9 @@ class EquipmentDetailScreen extends StatelessWidget {
       appBar: AppBar(
         leading: const ProfileIconButton(),
         title: Text(equipment.name),
+        actions: [
+          const LogoutIconButton(),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

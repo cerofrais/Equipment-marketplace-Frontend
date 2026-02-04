@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:equip_verse/core/models/rental_request.dart';
 import 'package:intl/intl.dart';
+import 'package:equip_verse/core/widgets/logout_icon_button.dart';
 
 class RentalRequestDetailScreen extends StatelessWidget {
   final RentalRequest request;
@@ -46,6 +47,9 @@ class RentalRequestDetailScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Request Details'),
+        actions: [
+          const LogoutIconButton(),
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -195,6 +199,42 @@ class RentalRequestDetailScreen extends StatelessWidget {
                       ),
                     ],
                   ),
+                  
+                  if (request.reason != null || request.desiredPrice != null) ...[
+                    const SizedBox(height: 16),
+                    
+                    Text(
+                      'Additional Details',
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                    ),
+                    const SizedBox(height: 16),
+                    
+                    _buildDetailCard(
+                      context,
+                      [
+                        if (request.desiredPrice != null)
+                          _DetailItem(
+                            icon: Icons.attach_money,
+                            label: 'Budget',
+                            value: '\$${request.desiredPrice!.toStringAsFixed(2)}',
+                          ),
+                        if (request.reason != null)
+                          _DetailItem(
+                            icon: Icons.description,
+                            label: 'Reason for Rental',
+                            value: request.reason!,
+                          ),
+                        if (request.details != null)
+                          _DetailItem(
+                            icon: Icons.info,
+                            label: 'Details',
+                            value: request.details!,
+                          ),
+                      ],
+                    ),
+                  ],
                 ],
               ),
             ),
