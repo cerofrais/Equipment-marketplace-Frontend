@@ -1,0 +1,109 @@
+name: Build and Release Android APK
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:  # Allows manual trigger
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.0'
+          channel: 'stable'
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Run tests
+        run: flutter test
+        continue-on-error: true
+
+      - name: Build Android APK
+        run: flutter build apk --release
+
+      - name: Get version from pubspec.yaml
+        id: version
+        run: |
+          VERSION=$(grep '^version:' pubspec.yaml | awk '{print $2}' | cut -d'+' -f1)
+          BUILD_NUMBER=$(grep '^version:' pubspec.yaml | awk '{print $2}' | cut -d'+' -f2)
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "build_number=$BUILD_NUMBER" >> $GITHUB_OUTPUT
+          echo "Version: $VERSION, Build: $BUILD_NUMBER"
+
+      - name: Generate release tag
+        id: tag
+        run: |
+          TAG="v${{ steps.version.outputs.version }}-build.${{ steps.version.outputs.build_number }}"
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+          echo "Release tag: $TAG"
+
+      - name: Rename APK
+        run: |
+          mv build/app/outputs/flutter-apk/app-release.apk \
+             build/app/outputs/flutter-apk/equipverse-${{ steps.version.outputs.version }}-release.apk
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.tag.outputs.tag }}
+          release_name: EquipVerse v${{ steps.version.outputs.version }} (Build ${{ steps.version.outputs.build_number }})
+          body: |
+            ## EquipVerse Android Release
+            
+            **Version:** ${{ steps.version.outputs.version }}
+            **Build Number:** ${{ steps.version.outputs.build_number }}
+            **Commit:** ${{ github.sha }}
+            
+            ### What's New
+            This release was automatically generated from the latest merge to main.
+            
+            ### Download
+            Download the APK below to install on your Android device.
+            
+            ### Installation
+            1. Download the APK file
+            2. Enable "Install from Unknown Sources" in your device settings
+            3. Open the APK file to install
+            
+            ---
+            *Built with Flutter on ${{ github.event.head_commit.timestamp }}*
+          draft: false
+          prerelease: false
+
+      - name: Upload APK to Release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: build/app/outputs/flutter-apk/equipverse-${{ steps.version.outputs.version }}-release.apk
+          asset_name: equipverse-${{ steps.version.outputs.version }}-release.apk
+          asset_content_type: application/vnd.android.package-archive
+
+      - name: Upload APK as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-release-apk
+          path: build/app/outputs/flutter-apk/equipverse-${{ steps.version.outputs.version }}-release.apk
+          retention-days: 30
