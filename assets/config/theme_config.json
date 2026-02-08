@@ -1,0 +1,70 @@
+{
+  "theme": "Dark Mode Full Palette",
+  "colors": [
+    {
+      "Element": "Primary Background",
+      "HexCode": "#000000",
+      "Usage": "Main app background and deepest UI layer"
+    },
+    {
+      "Element": "Secondary Background",
+      "HexCode": "#121212",
+      "Usage": "Inset elements, search bars, and secondary containers"
+    },
+    {
+      "Element": "Tertiary Background",
+      "HexCode": "#1F1F1F",
+      "Usage": "Elevated cards, modals, and surface overlays"
+    },
+    {
+      "Element": "Primary Content",
+      "HexCode": "#FFFFFF",
+      "Usage": "Headlines, main body text, and primary icons"
+    },
+    {
+      "Element": "Secondary Content",
+      "HexCode": "#AFAFAF",
+      "Usage": "Subtitles, secondary labels, and hint text"
+    },
+    {
+      "Element": "Tertiary Content",
+      "HexCode": "#6B6B6B",
+      "Usage": "Disabled text and low-priority metadata"
+    },
+    {
+      "Element": "Primary Action / Safety Blue",
+      "HexCode": "#276EF1",
+      "Usage": "Buttons, hyperlinks, and active states"
+    },
+    {
+      "Element": "Subtle Border",
+      "HexCode": "#292929",
+      "Usage": "Standard dividers and thin separators"
+    },
+    {
+      "Element": "Opaque Border",
+      "HexCode": "#333333",
+      "Usage": "Stronger separation for clickable components"
+    },
+    {
+      "Element": "Success Green",
+      "HexCode": "#05A35B",
+      "Usage": "Confirmations and positive status updates"
+    },
+    {
+      "Element": "Warning Yellow",
+      "HexCode": "#FFC043",
+      "Usage": "Cautions, pending states, and ratings"
+    },
+    {
+      "Element": "Error Red",
+      "HexCode": "#E11900",
+      "Usage": "Critical alerts and destructive actions"
+    },
+    {
+      "Element": "Illustrative Brown",
+      "HexCode": "#99644C",
+      "Usage": "Specialized icons or branded illustrations"
+    }
+  ]
+}

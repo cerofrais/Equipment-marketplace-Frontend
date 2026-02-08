@@ -46,7 +46,7 @@ class RentalRequestDetailScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Request Details'),
+        title: const Text('eqp Rent - Request Details'),
         actions: [
           const LogoutIconButton(),
         ],

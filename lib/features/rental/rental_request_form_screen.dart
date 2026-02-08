@@ -150,7 +150,7 @@ class _RentalRequestFormScreenState extends State<RentalRequestFormScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: const ProfileIconButton(),
-        title: const Text('Rental Request'),
+        title: const Text('eqp Rent - Rental Request'),
         actions: [
           const LogoutIconButton(),
         ],

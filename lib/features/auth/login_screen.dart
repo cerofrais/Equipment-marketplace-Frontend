@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:equip_verse/core/services/auth_service.dart';
+import 'package:equip_verse/core/theme/app_colors.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -49,9 +50,39 @@ class _LoginScreenState extends State<LoginScreen> {
                   height: 200,
                 ),
                 const SizedBox(height: 40),
+                ColorFiltered(
+                  colorFilter: const ColorFilter.matrix([
+                    -1, 0, 0, 0, 255,
+                    0, -1, 0, 0, 255,
+                    0, 0, -1, 0, 255,
+                    0, 0, 0, 1, 0,
+                  ]),
+                  child: Image.asset(
+                    'assets/images/eqp_logo.png',
+                    height: 80,
+                    fit: BoxFit.contain,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                RichText(
+                  text: TextSpan(
+                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                    children: [
+                      const TextSpan(text: 'eqp '),
+                      TextSpan(
+                        text: 'Rent',
+                        style: TextStyle(color: AppColors.primaryAction),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 10),
                 Text(
                   'Welcome Back',
-                  style: Theme.of(context).textTheme.displayLarge,
+                  style: Theme.of(context).textTheme.headlineSmall,
                 ),
                 const SizedBox(height: 10),
                 Text(

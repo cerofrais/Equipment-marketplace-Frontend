@@ -15,7 +15,7 @@ class EquipmentDetailScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: const ProfileIconButton(),
-        title: Text(equipment.name),
+        title: Text('eqp Rent - ${equipment.name}'),
         actions: [
           const LogoutIconButton(),
         ],

@@ -61,7 +61,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Profile'),
+          title: const Text('eqp Rent - Profile'),
           actions: [
             const LogoutIconButton(),
           ],

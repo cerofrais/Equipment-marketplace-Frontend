@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:equip_verse/core/services/auth_service.dart';
+import 'package:equip_verse/core/theme/theme.dart';
 import 'package:equip_verse/ui/screens/equipment_list_screen.dart';
 import 'package:equip_verse/ui/screens/login_screen.dart';
+import 'package:equip_verse/features/auth/user_type_selection_screen.dart';
+import 'package:equip_verse/features/vendor/vendor_assets_screen.dart';
+import 'package:equip_verse/features/vendor/add_asset_screen.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -9,12 +13,17 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Equipverse',
-      theme: ThemeData(
-        primarySwatch: Colors.deepPurple,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
+      title: 'eqp Rent',
+      theme: appTheme,
+      darkTheme: appTheme, // Using the same theme for both light and dark mode
+      themeMode: ThemeMode.dark, // Force dark mode
       home: const AuthChecker(),
+      routes: {
+        '/user-type-selection': (context) => const UserTypeSelectionScreen(),
+        '/equipment-list': (context) => const EquipmentListScreen(),
+        '/vendor-assets': (context) => const VendorAssetsScreen(),
+        '/add-asset': (context) => const AddAssetScreen(),
+      },
     );
   }
 }
@@ -45,7 +54,7 @@ class _AuthCheckerState extends State<AuthChecker> {
           return const Scaffold(body: Center(child: CircularProgressIndicator()));
         }
         if (snapshot.hasData && snapshot.data!) {
-          return const EquipmentListScreen();
+          return const UserTypeSelectionScreen();
         } else {
           return const LoginScreen();
         }

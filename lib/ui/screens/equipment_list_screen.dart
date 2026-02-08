@@ -28,7 +28,7 @@ class _EquipmentListScreenState extends State<EquipmentListScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: const ProfileIconButton(),
-        title: const Text('Equipment'),
+        title: const Text('eqp Rent - Equipment'),
         actions: [
           const LogoutIconButton(),
         ],
