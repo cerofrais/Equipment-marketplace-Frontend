@@ -5,6 +5,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:developer' as developer;
 import 'package:image_picker/image_picker.dart';
 
+// Conditional import for platform-specific file saving
+import 'platform_file_saver_mobile.dart'
+    if (dart.library.js_interop) 'platform_file_saver_web.dart';
+
 class FileService {
   final String baseUrl = dotenv.env['BASE_URL'] ?? 'http://localhost:8000';
 
@@ -80,6 +84,20 @@ class FileService {
       }
     } catch (e) {
       developer.log('Error downloading image: $e', name: 'FileService');
+      rethrow;
+    }
+  }
+
+  /// Download and save image to device (works on both web and mobile)
+  Future<void> downloadAndSaveImage(String filePath, String filename) async {
+    try {
+      final bytes = await downloadImage(filePath);
+      
+      // Use platform-specific implementation
+      // The correct savePlatformFile function will be imported based on platform
+      await savePlatformFile(bytes, filename);
+    } catch (e) {
+      developer.log('Error downloading and saving image: $e', name: 'FileService');
       rethrow;
     }
   }

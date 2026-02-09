@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:equip_verse/core/models/asset.dart';
 import 'package:equip_verse/core/services/file_service.dart';
-import 'package:gal/gal.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:http/http.dart' as http;
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class AssetDetailsScreen extends StatefulWidget {
   final Asset asset;
@@ -325,18 +324,20 @@ class _AssetDetailsScreenState extends State<AssetDetailsScreen> {
   }
   Future<void> _downloadCurrentImage(BuildContext context, FileService fileService) async {
     try {
-      // Request permission
-      final permission = await _requestPermission();
-      if (!permission) {
-        if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Storage permission is required to download images'),
-              backgroundColor: Colors.red,
-            ),
-          );
+      // Request permission only on mobile platforms
+      if (!kIsWeb) {
+        final permission = await _requestPermission();
+        if (!permission) {
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Storage permission is required to download images'),
+                backgroundColor: Colors.red,
+              ),
+            );
+          }
+          return;
         }
-        return;
       }
 
       // Show loading indicator
@@ -362,32 +363,27 @@ class _AssetDetailsScreenState extends State<AssetDetailsScreen> {
         );
       }
 
-      // Download the first image (you can modify this to download current page image)
+      // Download the current image
       if (widget.asset.photoUrls.isEmpty) {
         throw Exception('No images to download');
       }
 
-      final imageUrl = fileService.getImageUrl(widget.asset.photoUrls[_currentImageIndex]);
-      final response = await http.get(Uri.parse(imageUrl));
+      final filePath = widget.asset.photoUrls[_currentImageIndex];
+      final filename = 'equipverse_${widget.asset.id}_${_currentImageIndex + 1}.jpg';
+      
+      // Use the new platform-aware download method
+      await fileService.downloadAndSaveImage(filePath, filename);
 
-      if (response.statusCode == 200) {
-        // Save to gallery
-        await Gal.putImageBytes(
-          response.bodyBytes,
-          album: 'EquipVerse',
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).clearSnackBars();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(kIsWeb 
+              ? 'Image downloaded to your downloads folder!' 
+              : 'Image saved to gallery!'),
+            backgroundColor: Colors.green,
+          ),
         );
-
-        if (context.mounted) {
-          ScaffoldMessenger.of(context).clearSnackBars();
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Image downloaded successfully!'),
-              backgroundColor: Colors.green,
-            ),
-          );
-        }
-      } else {
-        throw Exception('Failed to download image');
       }
     } catch (e) {
       if (context.mounted) {
