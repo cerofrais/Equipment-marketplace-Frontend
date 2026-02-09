@@ -38,7 +38,7 @@ jobs:
         continue-on-error: true
 
       - name: Build Web App
-        run: flutter build web --release --web-renderer canvaskit
+        run: flutter build web --release
 
       - name: Get version from pubspec.yaml
         id: version
@@ -79,43 +79,7 @@ jobs:
             ### What's New
             This release was automatically generated from the latest merge to main.
             
-            ### Deployment Instructions
             
-            #### Deploy to Azure VM (Nginx)
-            ```bash
-            # Download and extract
-            wget https://github.com/${{ github.repository }}/releases/download/${{ steps.tag.outputs.tag }}/equipverse-web-${{ steps.version.outputs.version }}.zip
-            unzip equipverse-web-${{ steps.version.outputs.version }}.zip
-            
-            # Deploy to web server
-            sudo rm -rf /var/www/equipverse/*
-            sudo cp -r web/* /var/www/equipverse/
-            sudo chown -R www-data:www-data /var/www/equipverse
-            sudo systemctl restart nginx
-            ```
-            
-            #### Deploy to any web server
-            1. Download the ZIP file below
-            2. Extract the contents
-            3. Upload the `web/` folder contents to your web server
-            4. Configure your web server to serve the `index.html` file
-            5. Ensure all requests fallback to `index.html` for client-side routing
-            
-            ### Server Configuration Example (Nginx)
-            ```nginx
-            server {
-                listen 80;
-                server_name your-domain.com;
-                root /var/www/equipverse;
-                index index.html;
-                
-                location / {
-                    try_files $uri $uri/ /index.html;
-                }
-                
-                gzip on;
-                gzip_types text/plain text/css application/json application/javascript text/xml application/xml;
-            }
             ```
             
             ---
