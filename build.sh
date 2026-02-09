@@ -5,6 +5,10 @@
 
 set -e  # Exit on error
 
+# Set Java 17 for Android builds
+export JAVA_HOME="/opt/homebrew/opt/openjdk@17/libexec/openjdk.jdk/Contents/Home"
+export PATH="$JAVA_HOME/bin:$PATH"
+
 # Colors for output
 GREEN='\033[0;32m'
 BLUE='\033[0;34m'

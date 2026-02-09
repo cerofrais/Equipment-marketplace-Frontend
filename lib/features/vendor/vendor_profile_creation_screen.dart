@@ -27,6 +27,7 @@ class _VendorProfileCreationScreenState extends State<VendorProfileCreationScree
   bool _isLoading = false;
   String? _loginPhone;
   String _whatsappSelection = 'custom'; // 'custom', 'poc', 'login'
+  bool _useSameAsLoginForPOC = false;
 
   @override
   void initState() {
@@ -182,19 +183,42 @@ class _VendorProfileCreationScreenState extends State<VendorProfileCreationScree
                   border: OutlineInputBorder(),
                 ),
                 keyboardType: TextInputType.phone,
+                enabled: !_useSameAsLoginForPOC,
                 onChanged: (value) {
                   if (_whatsappSelection == 'poc') {
                     _updateWhatsappNumber();
                   }
                 },
                 validator: (value) {
-                  if (value == null || value.isEmpty) {
+                  if (!_useSameAsLoginForPOC && (value == null || value.isEmpty)) {
                     return 'Please enter contact number';
                   }
                   return null;
                 },
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 8),
+              
+              // Same as Login Checkbox for POC
+              if (_loginPhone != null)
+                CheckboxListTile(
+                  title: Text('Same as Login ($_loginPhone)'),
+                  value: _useSameAsLoginForPOC,
+                  onChanged: (value) {
+                    setState(() {
+                      _useSameAsLoginForPOC = value ?? false;
+                      if (_useSameAsLoginForPOC && _loginPhone != null) {
+                        _pocContactController.text = _loginPhone!;
+                        // Also update WhatsApp if it's set to use POC
+                        if (_whatsappSelection == 'poc') {
+                          _updateWhatsappNumber();
+                        }
+                      }
+                    });
+                  },
+                  controlAffinity: ListTileControlAffinity.leading,
+                  contentPadding: EdgeInsets.zero,
+                ),
+              const SizedBox(height: 12),
               
               // WhatsApp Number Selection
               const Text(

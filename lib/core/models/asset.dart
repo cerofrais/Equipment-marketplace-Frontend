@@ -28,15 +28,26 @@ class Asset {
   });
 
   factory Asset.fromJson(Map<String, dynamic> json) {
+    // Collect all photo URLs from various fields
+    List<String> photos = [];
+    if (json['photo_front'] != null) photos.add(json['photo_front']);
+    if (json['photo_side'] != null) photos.add(json['photo_side']);
+    if (json['photo_plate'] != null) photos.add(json['photo_plate']);
+    if (json['additional_photos'] != null) {
+      if (json['additional_photos'] is List) {
+        photos.addAll(List<String>.from(json['additional_photos']));
+      }
+    }
+    
     return Asset(
       id: json['id'],
-      category: json['category'],
+      category: json['asset_category'] ?? json['category'],
       manufacturer: json['manufacturer'],
       model: json['model'],
       yearOfPurchase: json['year_of_purchase'],
       registrationNumber: json['registration_number'],
       serialNumber: json['serial_number'],
-      photoUrls: List<String>.from(json['photo_urls'] ?? []),
+      photoUrls: photos,
       conditionNotes: json['condition_notes'],
       location: json['location'],
       rentalRatePerDay: json['rental_rate_per_day']?.toDouble(),

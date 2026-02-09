@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:equip_verse/core/models/asset.dart';
 import 'package:equip_verse/core/services/vendor_service.dart';
+import 'package:equip_verse/core/services/file_service.dart';
 import 'package:equip_verse/core/widgets/logout_icon_button.dart';
 import 'package:equip_verse/features/vendor/vendor_profile_screen.dart';
+import 'package:equip_verse/features/vendor/asset_details_screen.dart';
 
 class VendorAssetsScreen extends StatefulWidget {
   const VendorAssetsScreen({super.key});
@@ -181,6 +183,8 @@ class _AssetCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final fileService = FileService();
+    
     return Card(
       margin: const EdgeInsets.only(bottom: 16),
       elevation: 2,
@@ -189,7 +193,12 @@ class _AssetCard extends StatelessWidget {
       ),
       child: InkWell(
         onTap: () {
-          // TODO: Navigate to asset details
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => AssetDetailsScreen(asset: asset),
+            ),
+          );
         },
         borderRadius: BorderRadius.circular(12),
         child: Padding(
@@ -202,7 +211,7 @@ class _AssetCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8),
                 child: asset.photoUrls.isNotEmpty
                     ? Image.network(
-                        asset.photoUrls.first,
+                        fileService.getImageUrl(asset.photoUrls.first),
                         width: 80,
                         height: 80,
                         fit: BoxFit.cover,

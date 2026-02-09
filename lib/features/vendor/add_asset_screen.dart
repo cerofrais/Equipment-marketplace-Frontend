@@ -1,10 +1,13 @@
 import 'dart:developer' as developer;
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:equip_verse/core/models/asset.dart';
 import 'package:equip_verse/core/services/equipment_service.dart';
 import 'package:equip_verse/core/services/equipment_types_service.dart';
 import 'package:equip_verse/core/services/vendor_service.dart';
+import 'package:equip_verse/core/services/file_service.dart';
 import 'package:equip_verse/core/widgets/logout_icon_button.dart';
+import 'package:image_picker/image_picker.dart';
 
 class AddAssetScreen extends StatefulWidget {
   const AddAssetScreen({super.key});
@@ -28,10 +31,14 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
   final _equipmentService = EquipmentService();
   final _equipmentTypesService = EquipmentTypesService();
   final _vendorService = VendorService();
+  final _fileService = FileService();
+  final _imagePicker = ImagePicker();
 
   int? _selectedYear;
-  final List<String> _photoUrls = [];
+  final List<XFile> _photoFiles = [];
+  final List<String> _uploadedPhotoPaths = [];
   bool _isLoading = false;
+  bool _isUploadingPhoto = false;
   List<Map<String, dynamic>> _equipmentTypes = [];
   bool _loadingTypes = true;
 
@@ -218,37 +225,59 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
   }
 
   Future<void> _pickImage() async {
-    // TODO: Implement actual image picker
-    // For now, showing a placeholder dialog
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Add Photo'),
-        content: const Text(
-          'Image picker will be implemented here.\nFor now, add a sample URL.',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
-          ),
-          TextButton(
-            onPressed: () {
-              setState(() {
-                _photoUrls.add('https://picsum.photos/seed/equipment${_photoUrls.length}/400');
-              });
-              Navigator.pop(context);
-            },
-            child: const Text('Add Sample'),
-          ),
-        ],
-      ),
-    );
+    try {
+      final XFile? image = await _imagePicker.pickImage(
+        source: ImageSource.gallery,
+        maxWidth: 1920,
+        maxHeight: 1080,
+        imageQuality: 85,
+      );
+
+      if (image != null) {
+        setState(() {
+          _isUploadingPhoto = true;
+        });
+
+        try {
+          // Upload image to server
+          final filePath = await _fileService.uploadEquipmentImage(image);
+          
+          setState(() {
+            _photoFiles.add(image);
+            _uploadedPhotoPaths.add(filePath);
+            _isUploadingPhoto = false;
+          });
+
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Photo uploaded successfully!')),
+            );
+          }
+        } catch (e) {
+          setState(() {
+            _isUploadingPhoto = false;
+          });
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Failed to upload photo: $e')),
+            );
+          }
+        }
+      }
+    } catch (e) {
+      developer.log('Error picking image: $e', name: 'AddAsset');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: ${e.toString()}')),
+        );
+      }
+    }
   }
 
   void _removePhoto(int index) {
     setState(() {
-      _photoUrls.removeAt(index);
+      _photoFiles.removeAt(index);
+      _uploadedPhotoPaths.removeAt(index);
     });
   }
 
@@ -277,7 +306,7 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
 
       final vendorId = vendorData['id'];
 
-      // Create equipment using API
+      // Create equipment using API with uploaded photo paths
       final result = await _equipmentService.createEquipment(
         assetCategory: _categoryController.text,
         manufacturer: _manufacturerController.text,
@@ -285,10 +314,10 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
         yearOfPurchase: _selectedYear!,
         registrationNumber: _registrationNumberController.text,
         serialNumber: _serialNumberController.text.isNotEmpty ? _serialNumberController.text : null,
-        photoFront: _photoUrls.isNotEmpty ? _photoUrls[0] : null,
-        photoSide: _photoUrls.length > 1 ? _photoUrls[1] : null,
-        photoPlate: _photoUrls.length > 2 ? _photoUrls[2] : null,
-        additionalPhotos: _photoUrls.length > 3 ? _photoUrls.sublist(3).join(',') : null,
+        photoFront: _uploadedPhotoPaths.isNotEmpty ? _uploadedPhotoPaths[0] : null,
+        photoSide: _uploadedPhotoPaths.length > 1 ? _uploadedPhotoPaths[1] : null,
+        photoPlate: _uploadedPhotoPaths.length > 2 ? _uploadedPhotoPaths[2] : null,
+        additionalPhotos: _uploadedPhotoPaths.length > 3 ? _uploadedPhotoPaths.sublist(3).join(',') : null,
         conditionNotes: _conditionNotesController.text.isNotEmpty ? _conditionNotesController.text : null,
         location: _locationController.text,
         rentalRatePerDay: _rentalRatePerDayController.text.isNotEmpty ? double.tryParse(_rentalRatePerDayController.text) : null,
@@ -489,12 +518,12 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
               ),
             ),
             const SizedBox(height: 8),
-            if (_photoUrls.isNotEmpty)
+            if (_photoFiles.isNotEmpty)
               SizedBox(
                 height: 120,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  itemCount: _photoUrls.length,
+                  itemCount: _photoFiles.length,
                   itemBuilder: (context, index) {
                     return Stack(
                       children: [
@@ -508,9 +537,19 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
                           ),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(8),
-                            child: Image.network(
-                              _photoUrls[index],
-                              fit: BoxFit.cover,
+                            child: FutureBuilder<Uint8List>(
+                              future: _photoFiles[index].readAsBytes(),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  return Image.memory(
+                                    snapshot.data!,
+                                    fit: BoxFit.cover,
+                                  );
+                                }
+                                return const Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              },
                             ),
                           ),
                         ),
@@ -540,9 +579,15 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
               ),
             const SizedBox(height: 8),
             OutlinedButton.icon(
-              onPressed: _pickImage,
-              icon: const Icon(Icons.add_photo_alternate),
-              label: const Text('Add Photo'),
+              onPressed: _isUploadingPhoto ? null : _pickImage,
+              icon: _isUploadingPhoto 
+                  ? const SizedBox(
+                      width: 16,
+                      height: 16,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : const Icon(Icons.add_photo_alternate),
+              label: Text(_isUploadingPhoto ? 'Uploading...' : 'Add Photo'),
             ),
             const SizedBox(height: 16),
 
