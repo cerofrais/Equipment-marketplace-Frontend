@@ -6,7 +6,7 @@ import 'dart:developer' as developer;
 import 'package:image_picker/image_picker.dart';
 
 class FileService {
-  final String baseUrl = dotenv.env['API_BASE_URL'] ?? 'http://localhost:8000';
+  final String baseUrl = dotenv.env['BASE_URL'] ?? 'http://localhost:8000';
 
   Future<String?> _getAuthToken() async {
     final prefs = await SharedPreferences.getInstance();
