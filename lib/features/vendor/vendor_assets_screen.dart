@@ -64,6 +64,96 @@ class _VendorAssetsScreenState extends State<VendorAssetsScreen> {
     }
   }
 
+  Future<void> _deleteAsset(Asset asset) async {
+    // Check if asset has an ID
+    if (asset.id == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Cannot delete asset: ID not found'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    // Show confirmation dialog
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Delete Asset'),
+          content: Text(
+            'Are you sure you want to delete ${asset.manufacturer} ${asset.model}?\n\nThis action cannot be undone.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.red,
+              ),
+              child: const Text('Delete'),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (confirmed != true) return;
+
+    // Show loading indicator
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Row(
+            children: [
+              SizedBox(
+                width: 20,
+                height: 20,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                ),
+              ),
+              SizedBox(width: 16),
+              Text('Deleting asset...'),
+            ],
+          ),
+          duration: Duration(seconds: 10),
+        ),
+      );
+    }
+
+    try {
+      await _vendorService.deleteEquipment(asset.id!);
+      
+      if (mounted) {
+        ScaffoldMessenger.of(context).clearSnackBars();
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Asset deleted successfully'),
+            backgroundColor: Colors.green,
+          ),
+        );
+        // Reload assets list
+        _loadAssets();
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).clearSnackBars();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to delete asset: ${e.toString()}'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -170,7 +260,10 @@ class _VendorAssetsScreenState extends State<VendorAssetsScreen> {
       itemCount: _assets.length,
       itemBuilder: (context, index) {
         final asset = _assets[index];
-        return _AssetCard(asset: asset);
+        return _AssetCard(
+          asset: asset,
+          onDelete: () => _deleteAsset(asset),
+        );
       },
     );
   }
@@ -178,8 +271,9 @@ class _VendorAssetsScreenState extends State<VendorAssetsScreen> {
 
 class _AssetCard extends StatelessWidget {
   final Asset asset;
+  final VoidCallback onDelete;
 
-  const _AssetCard({required this.asset});
+  const _AssetCard({required this.asset, required this.onDelete});
 
   @override
   Widget build(BuildContext context) {
@@ -200,6 +294,7 @@ class _AssetCard extends StatelessWidget {
             ),
           );
         },
+        onLongPress: onDelete,
         borderRadius: BorderRadius.circular(12),
         child: Padding(
           padding: const EdgeInsets.all(16),

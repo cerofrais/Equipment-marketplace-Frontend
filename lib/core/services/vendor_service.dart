@@ -116,4 +116,25 @@ class VendorService {
       throw Exception('Error fetching equipment: $e');
     }
   }
+
+  Future<void> deleteEquipment(String equipmentId) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('access_token');
+
+      final response = await http.delete(
+        Uri.parse('$_baseUrl/api/v1/equipment/$equipmentId'),
+        headers: {
+          'Content-Type': 'application/json',
+          if (token != null) 'Authorization': 'Bearer $token',
+        },
+      );
+
+      if (response.statusCode != 200 && response.statusCode != 204) {
+        throw Exception('Failed to delete equipment: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error deleting equipment: $e');
+    }
+  }
 }

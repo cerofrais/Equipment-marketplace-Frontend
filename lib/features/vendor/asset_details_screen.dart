@@ -1,11 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:equip_verse/core/models/asset.dart';
 import 'package:equip_verse/core/services/file_service.dart';
+import 'package:gal/gal.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:http/http.dart' as http;
 
-class AssetDetailsScreen extends StatelessWidget {
+class AssetDetailsScreen extends StatefulWidget {
   final Asset asset;
 
   const AssetDetailsScreen({super.key, required this.asset});
+
+  @override
+  State<AssetDetailsScreen> createState() => _AssetDetailsScreenState();
+}
+
+class _AssetDetailsScreenState extends State<AssetDetailsScreen> {
+  int _currentImageIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +40,7 @@ class AssetDetailsScreen extends StatelessWidget {
                 children: [
                   // Category
                   Text(
-                    asset.category,
+                    widget.asset.category,
                     style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                           fontWeight: FontWeight.bold,
                           color: Colors.green[700],
@@ -40,7 +50,7 @@ class AssetDetailsScreen extends StatelessWidget {
                   
                   // Manufacturer and Model
                   Text(
-                    '${asset.manufacturer} - ${asset.model}',
+                    '${widget.asset.manufacturer} - ${widget.asset.model}',
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                           color: Colors.grey[800],
                         ),
@@ -58,22 +68,22 @@ class AssetDetailsScreen extends StatelessWidget {
                             context,
                             Icons.calendar_today,
                             'Year of Purchase',
-                            asset.yearOfPurchase.toString(),
+                            widget.asset.yearOfPurchase.toString(),
                           ),
                           const Divider(height: 24),
                           _buildDetailRow(
                             context,
                             Icons.confirmation_number,
                             'Registration Number',
-                            asset.registrationNumber,
+                            widget.asset.registrationNumber,
                           ),
-                          if (asset.serialNumber != null) ...[
+                          if (widget.asset.serialNumber != null) ...[
                             const Divider(height: 24),
                             _buildDetailRow(
                               context,
                               Icons.numbers,
                               'Serial Number',
-                              asset.serialNumber!,
+                              widget.asset.serialNumber!,
                             ),
                           ],
                           const Divider(height: 24),
@@ -81,7 +91,7 @@ class AssetDetailsScreen extends StatelessWidget {
                             context,
                             Icons.location_on,
                             'Location',
-                            asset.location,
+                            widget.asset.location,
                           ),
                         ],
                       ),
@@ -90,7 +100,7 @@ class AssetDetailsScreen extends StatelessWidget {
                   const SizedBox(height: 16),
                   
                   // Rental Rates
-                  if (asset.rentalRatePerDay != null || asset.rentalRatePerWeek != null)
+                  if (widget.asset.rentalRatePerDay != null || widget.asset.rentalRatePerWeek != null)
                     Card(
                       elevation: 2,
                       color: Colors.green[50],
@@ -107,7 +117,7 @@ class AssetDetailsScreen extends StatelessWidget {
                                   ),
                             ),
                             const SizedBox(height: 12),
-                            if (asset.rentalRatePerDay != null)
+                            if (widget.asset.rentalRatePerDay != null)
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
@@ -116,7 +126,7 @@ class AssetDetailsScreen extends StatelessWidget {
                                     style: Theme.of(context).textTheme.bodyLarge,
                                   ),
                                   Text(
-                                    '₹${asset.rentalRatePerDay}',
+                                    '₹${widget.asset.rentalRatePerDay}',
                                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                                           color: Colors.green[700],
                                           fontWeight: FontWeight.bold,
@@ -124,9 +134,9 @@ class AssetDetailsScreen extends StatelessWidget {
                                   ),
                                 ],
                               ),
-                            if (asset.rentalRatePerDay != null && asset.rentalRatePerWeek != null)
+                            if (widget.asset.rentalRatePerDay != null && widget.asset.rentalRatePerWeek != null)
                               const SizedBox(height: 8),
-                            if (asset.rentalRatePerWeek != null)
+                            if (widget.asset.rentalRatePerWeek != null)
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
@@ -135,7 +145,7 @@ class AssetDetailsScreen extends StatelessWidget {
                                     style: Theme.of(context).textTheme.bodyLarge,
                                   ),
                                   Text(
-                                    '₹${asset.rentalRatePerWeek}',
+                                    '₹${widget.asset.rentalRatePerWeek}',
                                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                                           color: Colors.green[700],
                                           fontWeight: FontWeight.bold,
@@ -150,7 +160,7 @@ class AssetDetailsScreen extends StatelessWidget {
                   const SizedBox(height: 16),
                   
                   // Condition Notes
-                  if (asset.conditionNotes != null && asset.conditionNotes!.isNotEmpty)
+                  if (widget.asset.conditionNotes != null && widget.asset.conditionNotes!.isNotEmpty)
                     Card(
                       elevation: 2,
                       child: Padding(
@@ -166,7 +176,7 @@ class AssetDetailsScreen extends StatelessWidget {
                             ),
                             const SizedBox(height: 8),
                             Text(
-                              asset.conditionNotes!,
+                              widget.asset.conditionNotes!,
                               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                                     color: Colors.grey[700],
                                   ),
@@ -224,7 +234,7 @@ class AssetDetailsScreen extends StatelessWidget {
   }
 
   Widget _buildImageGallery(FileService fileService) {
-    if (asset.photoUrls.isEmpty) {
+    if (widget.asset.photoUrls.isEmpty) {
       return Container(
         width: double.infinity,
         height: 250,
@@ -239,29 +249,48 @@ class AssetDetailsScreen extends StatelessWidget {
 
     return SizedBox(
       height: 250,
-      child: PageView.builder(
-        itemCount: asset.photoUrls.length,
-        itemBuilder: (context, index) {
-          final imageUrl = fileService.getImageUrl(asset.photoUrls[index]);
-          return Image.network(
-            imageUrl,
-            width: double.infinity,
-            height: 250,
-            fit: BoxFit.cover,
-            errorBuilder: (context, error, stackTrace) {
-              return Container(
+      child: Stack(
+        children: [
+          PageView.builder(
+            itemCount: widget.asset.photoUrls.length,
+            onPageChanged: (index) {
+              setState(() {
+                _currentImageIndex = index;
+              });
+            },
+            itemBuilder: (context, index) {
+              final imageUrl = fileService.getImageUrl(widget.asset.photoUrls[index]);
+              return Image.network(
+                imageUrl,
                 width: double.infinity,
                 height: 250,
-                color: Colors.grey[300],
-                child: Icon(
-                  Icons.construction,
-                  size: 80,
-                  color: Colors.grey[600],
-                ),
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return Container(
+                    width: double.infinity,
+                    height: 250,
+                    color: Colors.grey[300],
+                    child: Icon(
+                      Icons.construction,
+                      size: 80,
+                      color: Colors.grey[600],
+                    ),
+                  );
+                },
               );
             },
-          );
-        },
+          ),
+          // Download button overlay
+          Positioned(
+            top: 16,
+            right: 16,
+            child: FloatingActionButton.small(
+              backgroundColor: Colors.black.withOpacity(0.6),
+              onPressed: () => _downloadCurrentImage(context, fileService),
+              child: const Icon(Icons.download, color: Colors.white),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -294,4 +323,98 @@ class AssetDetailsScreen extends StatelessWidget {
       ],
     );
   }
-}
+  Future<void> _downloadCurrentImage(BuildContext context, FileService fileService) async {
+    try {
+      // Request permission
+      final permission = await _requestPermission();
+      if (!permission) {
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Storage permission is required to download images'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+        return;
+      }
+
+      // Show loading indicator
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Row(
+              children: [
+                SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                  ),
+                ),
+                SizedBox(width: 16),
+                Text('Downloading image...'),
+              ],
+            ),
+            duration: Duration(seconds: 10),
+          ),
+        );
+      }
+
+      // Download the first image (you can modify this to download current page image)
+      if (widget.asset.photoUrls.isEmpty) {
+        throw Exception('No images to download');
+      }
+
+      final imageUrl = fileService.getImageUrl(widget.asset.photoUrls[_currentImageIndex]);
+      final response = await http.get(Uri.parse(imageUrl));
+
+      if (response.statusCode == 200) {
+        // Save to gallery
+        await Gal.putImageBytes(
+          response.bodyBytes,
+          album: 'EquipVerse',
+        );
+
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).clearSnackBars();
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Image downloaded successfully!'),
+              backgroundColor: Colors.green,
+            ),
+          );
+        }
+      } else {
+        throw Exception('Failed to download image');
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).clearSnackBars();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error: ${e.toString()}'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+  }
+
+  Future<bool> _requestPermission() async {
+    if (await Permission.photos.isGranted) {
+      return true;
+    }
+
+    // For Android 13+ (API 33+), use photos permission
+    // For Android 12 and below, use storage permission
+    final status = await Permission.photos.request();
+    if (status.isGranted) {
+      return true;
+    }
+
+    // Fallback to storage permission for older Android versions
+    final storageStatus = await Permission.storage.request();
+    return storageStatus.isGranted;
+  }}
