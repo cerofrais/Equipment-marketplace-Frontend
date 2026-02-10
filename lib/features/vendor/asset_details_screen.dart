@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:equip_verse/core/models/asset.dart';
 import 'package:equip_verse/core/services/file_service.dart';
+import 'package:equip_verse/features/vendor/schedule_form_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
@@ -205,13 +206,22 @@ class _AssetDetailsScreenState extends State<AssetDetailsScreen> {
           ],
         ),
         child: ElevatedButton(
-          onPressed: () {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Coming Soon!'),
-                duration: Duration(seconds: 2),
+          onPressed: () async {
+            final result = await Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ScheduleFormScreen(asset: widget.asset),
               ),
             );
+            
+            if (result == true && mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Equipment scheduled successfully!'),
+                  backgroundColor: Colors.green,
+                ),
+              );
+            }
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.green,
@@ -221,7 +231,7 @@ class _AssetDetailsScreenState extends State<AssetDetailsScreen> {
             ),
           ),
           child: const Text(
-            'Schedule - Coming Soon',
+            'Schedule Equipment',
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,

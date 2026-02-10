@@ -5,6 +5,7 @@ import 'package:equip_verse/core/services/file_service.dart';
 import 'package:equip_verse/core/widgets/logout_icon_button.dart';
 import 'package:equip_verse/features/vendor/vendor_profile_screen.dart';
 import 'package:equip_verse/features/vendor/asset_details_screen.dart';
+import 'package:equip_verse/features/vendor/schedule_list_screen.dart';
 
 class VendorAssetsScreen extends StatefulWidget {
   const VendorAssetsScreen({super.key});
@@ -263,8 +264,18 @@ class _VendorAssetsScreenState extends State<VendorAssetsScreen> {
         return _AssetCard(
           asset: asset,
           onDelete: () => _deleteAsset(asset),
+          onViewSchedule: () => _viewSchedule(asset),
         );
       },
+    );
+  }
+
+  void _viewSchedule(Asset asset) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ScheduleListScreen(asset: asset),
+      ),
     );
   }
 }
@@ -272,8 +283,57 @@ class _VendorAssetsScreenState extends State<VendorAssetsScreen> {
 class _AssetCard extends StatelessWidget {
   final Asset asset;
   final VoidCallback onDelete;
+  final VoidCallback onViewSchedule;
 
-  const _AssetCard({required this.asset, required this.onDelete});
+  const _AssetCard({
+    required this.asset,
+    required this.onDelete,
+    required this.onViewSchedule,
+  });
+
+  void _showOptionsMenu(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) => SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 40,
+                height: 4,
+                margin: const EdgeInsets.only(bottom: 16),
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+              ListTile(
+                leading: const Icon(Icons.calendar_today, color: Colors.green),
+                title: const Text('View Schedule'),
+                onTap: () {
+                  Navigator.pop(context);
+                  onViewSchedule();
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.delete, color: Colors.red),
+                title: const Text('Delete Equipment'),
+                onTap: () {
+                  Navigator.pop(context);
+                  onDelete();
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -294,7 +354,7 @@ class _AssetCard extends StatelessWidget {
             ),
           );
         },
-        onLongPress: onDelete,
+        onLongPress: () => _showOptionsMenu(context),
         borderRadius: BorderRadius.circular(12),
         child: Padding(
           padding: const EdgeInsets.all(16),
