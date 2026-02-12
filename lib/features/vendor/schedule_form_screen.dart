@@ -19,7 +19,7 @@ class _ScheduleFormScreenState extends State<ScheduleFormScreen> {
   final _scheduleService = ScheduleService();
   
   final _customerNameController = TextEditingController();
-  final _customerNumberController = TextEditingController();
+  final _customerNumberController = TextEditingController(text: '+91');
   final _priceController = TextEditingController();
   
   DateTime? _startDateTime;
@@ -448,7 +448,7 @@ class _ScheduleFormScreenState extends State<ScheduleFormScreen> {
                     TextFormField(
                       controller: _customerNumberController,
                       decoration: InputDecoration(
-                        hintText: 'Enter contact number',
+                        hintText: '+919876543210',
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),

@@ -608,6 +608,7 @@ class _AddAssetScreenState extends State<AddAssetScreen> {
               controller: _locationController,
               decoration: const InputDecoration(
                 labelText: 'Location *',
+                hintText: '500084',
                 border: OutlineInputBorder(),
                 prefixIcon: Icon(Icons.location_on),
               ),

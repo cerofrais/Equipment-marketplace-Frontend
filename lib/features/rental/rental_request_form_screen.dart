@@ -218,7 +218,7 @@ class _RentalRequestFormScreenState extends State<RentalRequestFormScreen> {
                   controller: _zipCodeController,
                   decoration: const InputDecoration(
                     labelText: 'ZIP Code',
-                    hintText: 'Enter your ZIP code',
+                    hintText: '500084',
                     border: OutlineInputBorder(),
                     prefixIcon: Icon(Icons.location_on),
                   ),

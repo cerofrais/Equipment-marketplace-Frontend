@@ -16,8 +16,8 @@ class _VendorProfileCreationScreenState extends State<VendorProfileCreationScree
   
   final _businessNameController = TextEditingController();
   final _pocNameController = TextEditingController();
-  final _pocContactController = TextEditingController();
-  final _whatsappNumberController = TextEditingController();
+  final _pocContactController = TextEditingController(text: '+91');
+  final _whatsappNumberController = TextEditingController(text: '+91');
   final _gstNumberController = TextEditingController();
   final _gstAddressController = TextEditingController();
   final _extraDetailsController = TextEditingController();
@@ -316,7 +316,7 @@ class _VendorProfileCreationScreenState extends State<VendorProfileCreationScree
                 controller: _warehouseZipController,
                 decoration: const InputDecoration(
                   labelText: 'Warehouse ZIP Code',
-                  hintText: 'Enter ZIP code',
+                  hintText: '500084',
                   prefixIcon: Icon(Icons.location_on),
                   border: OutlineInputBorder(),
                 ),
