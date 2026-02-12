@@ -11,7 +11,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final _phoneController = TextEditingController();
+  final _phoneController = TextEditingController(text: '+91');
   final _authService = AuthService();
   bool _isLoading = false;
 
@@ -95,6 +95,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   controller: _phoneController,
                   decoration: const InputDecoration(
                     labelText: 'Phone Number',
+                    hintText: '+919876543210',
                     prefixIcon: Icon(Icons.phone),
                   ),
                   keyboardType: TextInputType.phone,

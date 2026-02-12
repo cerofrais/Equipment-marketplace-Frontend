@@ -455,6 +455,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 controller: zipCodeController,
                 decoration: const InputDecoration(
                   labelText: 'ZIP Code',
+                  hintText: '500084',
                   border: OutlineInputBorder(),
                 ),
                 keyboardType: TextInputType.number,

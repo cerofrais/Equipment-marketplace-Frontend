@@ -18,8 +18,8 @@ class _VendorProfileScreenState extends State<VendorProfileScreen> {
   final _formKey = GlobalKey<FormState>();
   final _businessNameController = TextEditingController();
   final _pocNameController = TextEditingController();
-  final _pocContactController = TextEditingController();
-  final _whatsappNumberController = TextEditingController();
+  final _pocContactController = TextEditingController(text: '+91');
+  final _whatsappNumberController = TextEditingController(text: '+91');
   final _gstNumberController = TextEditingController();
   final _gstAddressController = TextEditingController();
   final _extraDetailsController = TextEditingController();
@@ -75,8 +75,8 @@ class _VendorProfileScreenState extends State<VendorProfileScreen> {
     if (_vendorData != null) {
       _businessNameController.text = _vendorData!['business_name'] ?? '';
       _pocNameController.text = _vendorData!['poc_name'] ?? '';
-      _pocContactController.text = _vendorData!['poc_contact_number'] ?? '';
-      _whatsappNumberController.text = _vendorData!['whatsapp_number'] ?? '';
+      _pocContactController.text = _vendorData!['poc_contact_number'] ?? '+91';
+      _whatsappNumberController.text = _vendorData!['whatsapp_number'] ?? '+91';
       _gstNumberController.text = _vendorData!['gst_number'] ?? '';
       _gstAddressController.text = _vendorData!['gst_registered_address'] ?? '';
       _extraDetailsController.text = _vendorData!['extra_details'] ?? '';
@@ -223,6 +223,7 @@ class _VendorProfileScreenState extends State<VendorProfileScreen> {
             controller: _pocContactController,
             decoration: const InputDecoration(
               labelText: 'POC Contact',
+              hintText: '+919876543210',
               border: OutlineInputBorder(),
               prefixIcon: Icon(Icons.phone),
             ),
@@ -234,6 +235,7 @@ class _VendorProfileScreenState extends State<VendorProfileScreen> {
             controller: _whatsappNumberController,
             decoration: const InputDecoration(
               labelText: 'WhatsApp Number',
+              hintText: '+919876543210',
               border: OutlineInputBorder(),
               prefixIcon: Icon(Icons.message),
             ),
@@ -264,6 +266,7 @@ class _VendorProfileScreenState extends State<VendorProfileScreen> {
             controller: _warehouseZipController,
             decoration: const InputDecoration(
               labelText: 'Warehouse ZIP',
+              hintText: '500084',
               border: OutlineInputBorder(),
               prefixIcon: Icon(Icons.location_on),
             ),

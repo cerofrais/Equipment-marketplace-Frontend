@@ -6,6 +6,7 @@ import 'package:eqp_rent/core/widgets/logout_icon_button.dart';
 import 'package:eqp_rent/features/vendor/vendor_profile_screen.dart';
 import 'package:eqp_rent/features/vendor/asset_details_screen.dart';
 import 'package:eqp_rent/features/vendor/schedule_list_screen.dart';
+import 'package:eqp_rent/features/vendor/schedule_form_screen.dart';
 
 class VendorAssetsScreen extends StatefulWidget {
   const VendorAssetsScreen({super.key});
@@ -265,6 +266,7 @@ class _VendorAssetsScreenState extends State<VendorAssetsScreen> {
           asset: asset,
           onDelete: () => _deleteAsset(asset),
           onViewSchedule: () => _viewSchedule(asset),
+          onScheduleEquipment: () => _scheduleEquipment(asset),
         );
       },
     );
@@ -278,62 +280,29 @@ class _VendorAssetsScreenState extends State<VendorAssetsScreen> {
       ),
     );
   }
+
+  void _scheduleEquipment(Asset asset) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ScheduleFormScreen(asset: asset),
+      ),
+    );
+  }
 }
 
 class _AssetCard extends StatelessWidget {
   final Asset asset;
   final VoidCallback onDelete;
   final VoidCallback onViewSchedule;
+  final VoidCallback onScheduleEquipment;
 
   const _AssetCard({
     required this.asset,
     required this.onDelete,
     required this.onViewSchedule,
+    required this.onScheduleEquipment,
   });
-
-  void _showOptionsMenu(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (context) => SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                width: 40,
-                height: 4,
-                margin: const EdgeInsets.only(bottom: 16),
-                decoration: BoxDecoration(
-                  color: Colors.grey[300],
-                  borderRadius: BorderRadius.circular(2),
-                ),
-              ),
-              ListTile(
-                leading: const Icon(Icons.calendar_today, color: Colors.green),
-                title: const Text('View Schedule'),
-                onTap: () {
-                  Navigator.pop(context);
-                  onViewSchedule();
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.delete, color: Colors.red),
-                title: const Text('Delete Equipment'),
-                onTap: () {
-                  Navigator.pop(context);
-                  onDelete();
-                },
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -354,76 +323,128 @@ class _AssetCard extends StatelessWidget {
             ),
           );
         },
-        onLongPress: () => _showOptionsMenu(context),
         borderRadius: BorderRadius.circular(12),
         child: Padding(
           padding: const EdgeInsets.all(16),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: Column(
             children: [
-              // Asset image
-              ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: asset.photoUrls.isNotEmpty
-                    ? Image.network(
-                        fileService.getImageUrl(asset.photoUrls.first),
-                        width: 80,
-                        height: 80,
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) {
-                          return _buildPlaceholder();
-                        },
-                      )
-                    : _buildPlaceholder(),
-              ),
-              const SizedBox(width: 16),
-              // Asset details
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      asset.category,
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      '${asset.manufacturer} - ${asset.model}',
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: Colors.grey[700],
-                          ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      'Reg: ${asset.registrationNumber}',
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: Colors.grey[600],
-                          ),
-                    ),
-                    if (asset.rentalRatePerDay != null) ...[
-                      const SizedBox(height: 8),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 4,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.green.withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                        child: Text(
-                          '₹${asset.rentalRatePerDay}/day',
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                color: Colors.green[700],
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Asset image
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: asset.photoUrls.isNotEmpty
+                        ? Image.network(
+                            fileService.getImageUrl(asset.photoUrls.first),
+                            width: 80,
+                            height: 80,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                              return _buildPlaceholder();
+                            },
+                          )
+                        : _buildPlaceholder(),
+                  ),
+                  const SizedBox(width: 16),
+                  // Asset details
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          asset.category,
+                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
                                 fontWeight: FontWeight.bold,
                               ),
                         ),
+                        const SizedBox(height: 4),
+                        Text(
+                          '${asset.manufacturer} - ${asset.model}',
+                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                color: Colors.grey[700],
+                              ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          'Reg: ${asset.registrationNumber}',
+                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                color: Colors.grey[600],
+                              ),
+                        ),
+                        if (asset.rentalRatePerDay != null) ...[
+                          const SizedBox(height: 8),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 4,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.green.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                            child: Text(
+                              '₹${asset.rentalRatePerDay}/day',
+                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                    color: Colors.green[700],
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              const Divider(height: 1),
+              const SizedBox(height: 8),
+              // Action buttons
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Expanded(
+                    child: TextButton.icon(
+                      onPressed: () {
+                        onViewSchedule();
+                      },
+                      icon: const Icon(Icons.calendar_today, size: 18),
+                      label: const Text('View Schedule'),
+                      style: TextButton.styleFrom(
+                        foregroundColor: Colors.blue,
                       ),
-                    ],
-                  ],
-                ),
+                    ),
+                  ),
+                  Container(
+                    width: 1,
+                    height: 30,
+                    color: Colors.grey[300],
+                  ),
+                  Expanded(
+                    child: TextButton.icon(
+                      onPressed: () {
+                        onScheduleEquipment();
+                      },
+                      icon: const Icon(Icons.add_box, size: 18),
+                      label: const Text('Schedule'),
+                      style: TextButton.styleFrom(
+                        foregroundColor: Colors.green,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    width: 1,
+                    height: 30,
+                    color: Colors.grey[300],
+                  ),
+                  IconButton(
+                    onPressed: onDelete,
+                    icon: const Icon(Icons.delete_outline),
+                    color: Colors.red,
+                    tooltip: 'Delete',
+                  ),
+                ],
               ),
             ],
           ),
