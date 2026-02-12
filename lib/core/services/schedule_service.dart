@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:equip_verse/core/models/schedule.dart';
-import 'package:equip_verse/core/services/vendor_service.dart';
+import 'package:eqp_rent/core/models/schedule.dart';
+import 'package:eqp_rent/core/services/vendor_service.dart';
 
 class ScheduleService {
   final String _baseUrl = dotenv.env['BASE_URL']!;

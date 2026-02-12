@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:equip_verse/core/services/vendor_service.dart';
-import 'package:equip_verse/core/theme/app_colors.dart';
-import 'package:equip_verse/features/vendor/vendor_profile_creation_screen.dart';
+import 'package:eqp_rent/core/services/vendor_service.dart';
+import 'package:eqp_rent/core/theme/app_colors.dart';
+import 'package:eqp_rent/features/vendor/vendor_profile_creation_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserTypeSelectionScreen extends StatelessWidget {
@@ -123,7 +123,7 @@ class UserTypeSelectionScreen extends StatelessWidget {
               const SizedBox(height: 24),
               _UserTypeCard(
                 icon: Icons.business,
-                title: 'Vendor',
+                title: 'Supplier',
                 subtitle: 'List and manage your equipment',
                 color: Colors.green,
                 onTap: () => _handleVendorSelection(context),

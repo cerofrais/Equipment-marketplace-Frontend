@@ -26,18 +26,28 @@ class RentalRequest {
   });
 
   factory RentalRequest.fromJson(Map<String, dynamic> json) {
+    // Handle desiredPrice as both string and number
+    double? desiredPriceValue;
+    if (json['desired_price'] != null) {
+      if (json['desired_price'] is String) {
+        desiredPriceValue = double.tryParse(json['desired_price']);
+      } else if (json['desired_price'] is num) {
+        desiredPriceValue = (json['desired_price'] as num).toDouble();
+      }
+    }
+
     return RentalRequest(
-      id: json['id'],
-      userId: json['user_id'],
-      equipmentTypeId: json['equipment_type_id'],
-      zipCode: json['zip_code'],
-      startDate: DateTime.parse(json['start_date']),
-      endDate: DateTime.parse(json['end_date']),
-      status: json['status'],
-      createdAt: DateTime.parse(json['created_at']),
-      details: json['details'],
-      desiredPrice: json['desired_price'] != null ? double.tryParse(json['desired_price'].toString()) : null,
-      reason: json['reason'],
+      id: json['id']?.toString() ?? '',
+      userId: json['user_id']?.toString() ?? '',
+      equipmentTypeId: json['equipment_type_id']?.toString() ?? '',
+      zipCode: json['zip_code']?.toString() ?? '',
+      startDate: DateTime.tryParse(json['start_date']?.toString() ?? '') ?? DateTime.now(),
+      endDate: DateTime.tryParse(json['end_date']?.toString() ?? '') ?? DateTime.now(),
+      status: json['status']?.toString() ?? '',
+      createdAt: DateTime.tryParse(json['created_at']?.toString() ?? '') ?? DateTime.now(),
+      details: json['details']?.toString(),
+      desiredPrice: desiredPriceValue,
+      reason: json['reason']?.toString(),
     );
   }
 }

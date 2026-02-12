@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:equip_verse/core/services/auth_service.dart';
-import 'package:equip_verse/ui/screens/login_screen.dart';
+import 'package:eqp_rent/core/services/auth_service.dart';
+import 'package:eqp_rent/ui/screens/login_screen.dart';
 
 class LogoutIconButton extends StatelessWidget {
   const LogoutIconButton({super.key});

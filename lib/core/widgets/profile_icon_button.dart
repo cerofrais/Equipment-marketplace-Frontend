@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:equip_verse/features/profile/profile_screen.dart';
+import 'package:eqp_rent/features/profile/profile_screen.dart';
 
 class ProfileIconButton extends StatelessWidget {
   const ProfileIconButton({super.key});

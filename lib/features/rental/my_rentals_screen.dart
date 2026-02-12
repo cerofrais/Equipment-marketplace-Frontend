@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:equip_verse/core/widgets/profile_icon_button.dart';
-import 'package:equip_verse/core/widgets/logout_icon_button.dart';
+import 'package:eqp_rent/core/widgets/profile_icon_button.dart';
+import 'package:eqp_rent/core/widgets/logout_icon_button.dart';
 
 class MyRentalsScreen extends StatelessWidget {
   const MyRentalsScreen({super.key});

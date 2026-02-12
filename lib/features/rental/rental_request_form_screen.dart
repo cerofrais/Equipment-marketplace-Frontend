@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:equip_verse/core/models/equipment.dart';
-import 'package:equip_verse/core/services/rental_service.dart';
-import 'package:equip_verse/core/widgets/equipment_image.dart';
+import 'package:eqp_rent/core/models/equipment.dart';
+import 'package:eqp_rent/core/services/rental_service.dart';
+import 'package:eqp_rent/core/widgets/equipment_image.dart';
 import 'package:intl/intl.dart';
-import 'package:equip_verse/core/widgets/profile_icon_button.dart';
-import 'package:equip_verse/core/widgets/logout_icon_button.dart';
+import 'package:eqp_rent/core/widgets/profile_icon_button.dart';
+import 'package:eqp_rent/core/widgets/logout_icon_button.dart';
 
 class RentalRequestFormScreen extends StatefulWidget {
   final Equipment equipment;

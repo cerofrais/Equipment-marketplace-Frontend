@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:equip_verse/core/theme/app_colors.dart';
+import 'package:eqp_rent/core/theme/app_colors.dart';
 
 // Text theme using Google Fonts
 TextTheme get appTextTheme => TextTheme(

@@ -1,9 +1,9 @@
 
-# Project Blueprint: Equipverse
+# Project Blueprint: EqpRent
 
 ## Overview
 
-Equipverse is a Flutter-based mobile application for an equipment rental marketplace. It connects customers who need to rent equipment with local vendors who can provide it. The app facilitates the entire rental process, from browsing equipment and submitting requests to receiving and accepting quotes from vendors.
+EqpRent is a Flutter-based mobile application for an equipment rental marketplace. It connects customers who need to rent equipment with local vendors who can provide it. The app facilitates the entire rental process, from browsing equipment and submitting requests to receiving and accepting quotes from vendors.
 
 ## Style and Design
 

@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
-import 'package:equip_verse/core/models/equipment.dart';
+import 'package:eqp_rent/core/models/equipment.dart';
 
 class ApiService {
   final String _baseUrl = dotenv.env['BASE_URL']!;

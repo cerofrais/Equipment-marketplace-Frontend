@@ -33,20 +33,20 @@ class User {
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-      id: json['id'],
-      phoneNumber: json['phone_number'],
-      email: json['email'],
-      fullName: json['full_name'],
-      address: json['address'],
-      city: json['city'],
-      state: json['state'],
-      zipCode: json['zip_code'],
-      companyName: json['company_name'],
-      role: json['role'],
+      id: json['id']?.toString() ?? '',
+      phoneNumber: json['phone_number']?.toString() ?? '',
+      email: json['email']?.toString(),
+      fullName: json['full_name']?.toString(),
+      address: json['address']?.toString(),
+      city: json['city']?.toString(),
+      state: json['state']?.toString(),
+      zipCode: json['zip_code']?.toString(),
+      companyName: json['company_name']?.toString(),
+      role: json['role']?.toString(),
       isActive: json['is_active'] ?? true,
-      createdAt: DateTime.parse(json['created_at']),
-      updatedAt: json['updated_at'] != null ? DateTime.parse(json['updated_at']) : null,
-      lastLogin: json['last_login'] != null ? DateTime.parse(json['last_login']) : null,
+      createdAt: DateTime.tryParse(json['created_at']?.toString() ?? '') ?? DateTime.now(),
+      updatedAt: json['updated_at'] != null ? DateTime.tryParse(json['updated_at']) : null,
+      lastLogin: json['last_login'] != null ? DateTime.tryParse(json['last_login']) : null,
     );
   }
 

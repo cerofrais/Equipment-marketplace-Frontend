@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:equip_verse/core/models/asset.dart';
-import 'package:equip_verse/core/services/file_service.dart';
-import 'package:equip_verse/features/vendor/schedule_form_screen.dart';
+import 'package:eqp_rent/core/models/asset.dart';
+import 'package:eqp_rent/core/services/file_service.dart';
+import 'package:eqp_rent/features/vendor/schedule_form_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
@@ -52,7 +52,7 @@ class _AssetDetailsScreenState extends State<AssetDetailsScreen> {
                   Text(
                     '${widget.asset.manufacturer} - ${widget.asset.model}',
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          color: Colors.grey[800],
+                          color: Colors.white,
                         ),
                   ),
                   const SizedBox(height: 24),
@@ -103,7 +103,6 @@ class _AssetDetailsScreenState extends State<AssetDetailsScreen> {
                   if (widget.asset.rentalRatePerDay != null || widget.asset.rentalRatePerWeek != null)
                     Card(
                       elevation: 2,
-                      color: Colors.green[50],
                       child: Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: Column(

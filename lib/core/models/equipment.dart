@@ -15,11 +15,11 @@ class Equipment {
 
   factory Equipment.fromJson(Map<String, dynamic> json) {
     return Equipment(
-      id: json['id'],
-      name: json['name'],
-      category: json['category'],
-      description: json['description'],
-      image: json['image_url'] ?? 'assets/images/placeholder.png', // Use API image URL or fallback to local
+      id: json['id']?.toString() ?? '',
+      name: json['name']?.toString() ?? '',
+      category: json['category']?.toString() ?? '',
+      description: json['description']?.toString() ?? '',
+      image: json['image_url']?.toString() ?? 'assets/images/placeholder.png', // Use API image URL or fallback to local
     );
   }
 }

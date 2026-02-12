@@ -1,11 +1,11 @@
 {
-    "name": "equip_verse",
-    "short_name": "equip_verse",
+    "name": "EqpRent",
+    "short_name": "EqpRent",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "Equipment rental marketplace application.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
