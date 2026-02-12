@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:equip_verse/core/services/auth_service.dart';
-import 'package:equip_verse/core/services/user_service.dart';
-import 'package:equip_verse/core/services/rental_service.dart';
-import 'package:equip_verse/core/models/user.dart';
-import 'package:equip_verse/core/models/rental_request.dart';
+import 'package:eqp_rent/core/services/auth_service.dart';
+import 'package:eqp_rent/core/services/user_service.dart';
+import 'package:eqp_rent/core/services/rental_service.dart';
+import 'package:eqp_rent/core/models/user.dart';
+import 'package:eqp_rent/core/models/rental_request.dart';
 import 'package:intl/intl.dart';
-import 'package:equip_verse/ui/screens/login_screen.dart';
-import 'package:equip_verse/features/profile/rental_request_detail_screen.dart';
-import 'package:equip_verse/core/widgets/logout_icon_button.dart';
+import 'package:eqp_rent/ui/screens/login_screen.dart';
+import 'package:eqp_rent/features/profile/rental_request_detail_screen.dart';
+import 'package:eqp_rent/core/widgets/logout_icon_button.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});

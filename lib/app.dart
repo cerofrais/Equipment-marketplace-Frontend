@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:equip_verse/core/services/auth_service.dart';
-import 'package:equip_verse/core/theme/theme.dart';
-import 'package:equip_verse/ui/screens/equipment_list_screen.dart';
-import 'package:equip_verse/ui/screens/login_screen.dart';
-import 'package:equip_verse/features/auth/user_type_selection_screen.dart';
-import 'package:equip_verse/features/vendor/vendor_assets_screen.dart';
-import 'package:equip_verse/features/vendor/add_asset_screen.dart';
+import 'package:eqp_rent/core/services/auth_service.dart';
+import 'package:eqp_rent/core/theme/theme.dart';
+import 'package:eqp_rent/ui/screens/equipment_list_screen.dart';
+import 'package:eqp_rent/ui/screens/login_screen.dart';
+import 'package:eqp_rent/features/auth/user_type_selection_screen.dart';
+import 'package:eqp_rent/features/vendor/vendor_assets_screen.dart';
+import 'package:eqp_rent/features/vendor/add_asset_screen.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

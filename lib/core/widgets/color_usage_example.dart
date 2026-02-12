@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:equip_verse/core/theme/app_colors.dart';
+import 'package:eqp_rent/core/theme/app_colors.dart';
 
 /// Example widget demonstrating how to use AppColors throughout the app
 class ColorUsageExample extends StatelessWidget {

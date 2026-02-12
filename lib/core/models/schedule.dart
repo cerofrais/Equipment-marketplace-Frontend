@@ -31,23 +31,23 @@ class Schedule {
     if (json['price'] != null) {
       if (json['price'] is String) {
         priceValue = double.tryParse(json['price']);
-      } else {
-        priceValue = json['price']?.toDouble();
+      } else if (json['price'] is num) {
+        priceValue = (json['price'] as num).toDouble();
       }
     }
 
     return Schedule(
-      id: json['id'],
-      vendorId: json['vendor_id'],
-      equipmentId: json['equipment_id'],
-      startTime: json['start_time'],
-      endTime: json['end_time'],
-      name: json['name'],
-      contact: json['contact'],
+      id: json['id']?.toString(),
+      vendorId: json['vendor_id']?.toString(),
+      equipmentId: json['equipment_id']?.toString() ?? '',
+      startTime: json['start_time']?.toString() ?? '',
+      endTime: json['end_time']?.toString() ?? '',
+      name: json['name']?.toString() ?? '',
+      contact: json['contact']?.toString() ?? '',
       price: priceValue,
-      status: json['status'],
-      createdAt: json['created_at'] != null ? DateTime.parse(json['created_at']) : null,
-      updatedAt: json['updated_at'] != null ? DateTime.parse(json['updated_at']) : null,
+      status: json['status']?.toString(),
+      createdAt: json['created_at'] != null ? DateTime.tryParse(json['created_at']) : null,
+      updatedAt: json['updated_at'] != null ? DateTime.tryParse(json['updated_at']) : null,
     );
   }
 

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:equip_verse/core/models/equipment.dart';
-import 'package:equip_verse/core/widgets/profile_icon_button.dart';
-import 'package:equip_verse/core/widgets/logout_icon_button.dart';
+import 'package:eqp_rent/core/models/equipment.dart';
+import 'package:eqp_rent/core/widgets/profile_icon_button.dart';
+import 'package:eqp_rent/core/widgets/logout_icon_button.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});

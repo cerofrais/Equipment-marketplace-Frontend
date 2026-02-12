@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:equip_verse/core/models/rental_request.dart';
+import 'package:eqp_rent/core/models/rental_request.dart';
 import 'package:intl/intl.dart';
-import 'package:equip_verse/core/widgets/logout_icon_button.dart';
+import 'package:eqp_rent/core/widgets/logout_icon_button.dart';
 
 class RentalRequestDetailScreen extends StatelessWidget {
   final RentalRequest request;

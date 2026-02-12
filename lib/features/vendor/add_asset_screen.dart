@@ -1,12 +1,12 @@
 import 'dart:developer' as developer;
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
-import 'package:equip_verse/core/models/asset.dart';
-import 'package:equip_verse/core/services/equipment_service.dart';
-import 'package:equip_verse/core/services/equipment_types_service.dart';
-import 'package:equip_verse/core/services/vendor_service.dart';
-import 'package:equip_verse/core/services/file_service.dart';
-import 'package:equip_verse/core/widgets/logout_icon_button.dart';
+import 'package:eqp_rent/core/models/asset.dart';
+import 'package:eqp_rent/core/services/equipment_service.dart';
+import 'package:eqp_rent/core/services/equipment_types_service.dart';
+import 'package:eqp_rent/core/services/vendor_service.dart';
+import 'package:eqp_rent/core/services/file_service.dart';
+import 'package:eqp_rent/core/widgets/logout_icon_button.dart';
 import 'package:image_picker/image_picker.dart';
 
 class AddAssetScreen extends StatefulWidget {

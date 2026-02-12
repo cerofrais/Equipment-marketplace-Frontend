@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:equip_verse/core/services/auth_service.dart';
-import 'package:equip_verse/core/theme/app_colors.dart';
-import 'package:equip_verse/features/auth/user_type_selection_screen.dart';
+import 'package:eqp_rent/core/services/auth_service.dart';
+import 'package:eqp_rent/core/theme/app_colors.dart';
+import 'package:eqp_rent/features/auth/user_type_selection_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});

@@ -1,6 +1,6 @@
-# equip_verse
+# EqpRent
 
-A new Flutter project.
+Equipment rental marketplace application.
 
 ## Getting Started
 

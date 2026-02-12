@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:equip_verse/core/models/asset.dart';
-import 'package:equip_verse/core/models/schedule.dart';
-import 'package:equip_verse/core/services/schedule_service.dart';
+import 'package:eqp_rent/core/models/asset.dart';
+import 'package:eqp_rent/core/models/schedule.dart';
+import 'package:eqp_rent/core/services/schedule_service.dart';
 import 'package:intl/intl.dart';
 
 class ScheduleFormScreen extends StatefulWidget {
