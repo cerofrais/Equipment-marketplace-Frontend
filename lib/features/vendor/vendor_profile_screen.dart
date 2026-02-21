@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:eqp_rent/core/services/vendor_service.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class VendorProfileScreen extends StatefulWidget {
   const VendorProfileScreen({super.key});

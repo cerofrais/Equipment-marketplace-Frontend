@@ -30,6 +30,51 @@ class EquipmentTypesService {
     }
   }
 
+  /// Get equipment type by ID including pay structure
+  Future<Map<String, dynamic>> getEquipmentTypeById(String equipmentTypeId) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('access_token');
+
+      // Include query parameter to request pay structure relation
+      final uri = Uri.parse('$_baseUrl/api/v1/equipment-types/$equipmentTypeId')
+          .replace(queryParameters: {'include_pay_structure': 'true'});
+
+      print('\n╔═══════════════════════════════════════════════════════════════╗');
+      print('║ FETCHING EQUIPMENT TYPE BY ID                                 ║');
+      print('╠═══════════════════════════════════════════════════════════════╣');
+      print('║ URL: $uri');
+      print('║ Equipment Type ID: $equipmentTypeId');
+      print('║ Has Token: ${token != null}');
+      print('╚═══════════════════════════════════════════════════════════════╝\n');
+      
+      final response = await http.get(
+        uri,
+        headers: {
+          'Content-Type': 'application/json',
+          if (token != null) 'Authorization': 'Bearer $token',
+        },
+      );
+
+      print('\n╔═══════════════════════════════════════════════════════════════╗');
+      print('║ API RESPONSE                                                  ║');
+      print('╠═══════════════════════════════════════════════════════════════╣');
+      print('║ Status Code: ${response.statusCode}');
+      print('║ Response Body:');
+      print('${response.body}');
+      print('╚═══════════════════════════════════════════════════════════════╝\n');
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed to fetch equipment type: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error in getEquipmentTypeById: $e'); // Debug log
+      throw Exception('Error fetching equipment type: $e');
+    }
+  }
+
   Future<Map<String, dynamic>> createEquipmentType({
     required String name,
     required String category,

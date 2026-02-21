@@ -6,6 +6,9 @@ import 'package:eqp_rent/ui/screens/login_screen.dart';
 import 'package:eqp_rent/features/auth/user_type_selection_screen.dart';
 import 'package:eqp_rent/features/vendor/vendor_assets_screen.dart';
 import 'package:eqp_rent/features/vendor/add_asset_screen.dart';
+import 'package:eqp_rent/features/vendor/supplier_onboarding_screen.dart';
+import 'package:eqp_rent/features/vendor/supplier_equipment_onboarding_screen.dart';
+import 'package:eqp_rent/core/models/organisation.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -23,6 +26,17 @@ class MyApp extends StatelessWidget {
         '/equipment-list': (context) => const EquipmentListScreen(),
         '/vendor-assets': (context) => const VendorAssetsScreen(),
         '/add-asset': (context) => const AddAssetScreen(),
+        '/supplier-onboarding': (context) => const SupplierOnboardingScreen(),
+      },
+      onGenerateRoute: (settings) {
+        // Handle routes that need arguments
+        if (settings.name == '/supplier-equipment-onboarding') {
+          final args = settings.arguments as Organisation?;
+          return MaterialPageRoute(
+            builder: (context) => SupplierEquipmentOnboardingScreen(organisation: args),
+          );
+        }
+        return null;
       },
     );
   }

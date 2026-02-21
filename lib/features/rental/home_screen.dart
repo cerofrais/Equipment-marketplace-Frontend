@@ -17,11 +17,46 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Equipment> _filteredEquipmentList = [];
 
   final List<Equipment> _equipmentList = [
-    Equipment(name: 'Excavator', category: 'Construction', imageUrl: 'https://picsum.photos/seed/picsum/200/300', pricePerDay: 250),
-    Equipment(name: 'Bulldozer', category: 'Construction', imageUrl: 'https://picsum.photos/seed/picsum/200/300', pricePerDay: 350),
-    Equipment(name: 'Crane', category: 'Construction', imageUrl: 'https://picsum.photos/seed/picsum/200/300', pricePerDay: 500),
-    Equipment(name: 'Tractor', category: 'Farming', imageUrl: 'https://picsum.photos/seed/picsum/200/300', pricePerDay: 150),
-    Equipment(name: 'Harvester', category: 'Farming', imageUrl: 'https://picsum.photos/seed/picsum/200/300', pricePerDay: 400),
+    Equipment(
+      regNumber: 'EXC001',
+      make: 'CAT',
+      model: '320',
+      category: 'EXCAVATOR',
+      image: 'https://picsum.photos/seed/excavator/200/300',
+      ratePerDay: 250,
+    ),
+    Equipment(
+      regNumber: 'BUL001',
+      make: 'Caterpillar',
+      model: 'D6T',
+      category: 'OTHER',
+      image: 'https://picsum.photos/seed/bulldozer/200/300',
+      ratePerDay: 350,
+    ),
+    Equipment(
+      regNumber: 'CRN001',
+      make: 'Liebherr',
+      model: 'LTM 1350',
+      category: 'CRANE',
+      image: 'https://picsum.photos/seed/crane/200/300',
+      ratePerDay: 500,
+    ),
+    Equipment(
+      regNumber: 'TRC001',
+      make: 'John Deere',
+      model: '5075E',
+      category: 'OTHER',
+      image: 'https://picsum.photos/seed/tractor/200/300',
+      ratePerDay: 150,
+    ),
+    Equipment(
+      regNumber: 'HRV001',
+      make: 'Case IH',
+      model: 'Axial-Flow',
+      category: 'OTHER',
+      image: 'https://picsum.photos/seed/harvester/200/300',
+      ratePerDay: 400,
+    ),
   ];
 
   @override
@@ -36,7 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       _filteredEquipmentList = _equipmentList.where((equipment) {
         return equipment.name.toLowerCase().contains(query) ||
-            equipment.category.toLowerCase().contains(query);
+            (equipment.category?.toLowerCase().contains(query) ?? false);
       }).toList();
     });
   }
@@ -103,9 +138,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: [
                         Text(equipment.name, style: Theme.of(context).textTheme.titleLarge),
                         const SizedBox(height: 4),
-                        Text(equipment.category, style: Theme.of(context).textTheme.bodyMedium),
+                        Text(equipment.categoryDisplay, style: Theme.of(context).textTheme.bodyMedium),
                         const SizedBox(height: 8),
-                        Text('\$${equipment.pricePerDay}/day', style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold)),
+                        Text('₹${equipment.ratePerDay?.toStringAsFixed(0) ?? "N/A"}/day', style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold)),
                       ],
                     ),
                   ),

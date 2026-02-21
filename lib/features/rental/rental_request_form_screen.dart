@@ -107,7 +107,7 @@ class _RentalRequestFormScreenState extends State<RentalRequestFormScreen> {
           : null;
           
       await _rentalService.createRentalRequest(
-        widget.equipment.id,
+        widget.equipment.id ?? '',
         _zipCodeController.text,
         _startDate!,
         _endDate!,
@@ -173,7 +173,7 @@ class _RentalRequestFormScreenState extends State<RentalRequestFormScreen> {
                         ClipRRect(
                           borderRadius: BorderRadius.circular(8),
                           child: EquipmentImage(
-                            imagePath: widget.equipment.image,
+                            imagePath: widget.equipment.imageUrl,
                             width: 80,
                             height: 80,
                             fit: BoxFit.cover,
@@ -192,7 +192,7 @@ class _RentalRequestFormScreenState extends State<RentalRequestFormScreen> {
                               ),
                               const SizedBox(height: 4),
                               Text(
-                                widget.equipment.category,
+                                widget.equipment.categoryDisplay,
                                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                                   color: Colors.grey[600],
                                 ),

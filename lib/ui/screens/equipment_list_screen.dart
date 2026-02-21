@@ -54,7 +54,7 @@ class _EquipmentListScreenState extends State<EquipmentListScreen> {
                     leading: ClipRRect(
                       borderRadius: BorderRadius.circular(8),
                       child: EquipmentImage(
-                        imagePath: item.image,
+                        imagePath: item.imageUrl,
                         width: 60,
                         height: 60,
                         fit: BoxFit.cover,
@@ -64,7 +64,7 @@ class _EquipmentListScreenState extends State<EquipmentListScreen> {
                       item.name,
                       style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    subtitle: Text(item.category),
+                    subtitle: Text(item.categoryDisplay),
                     trailing: const Icon(Icons.arrow_forward_ios, size: 16),
                     onTap: () {
                       Navigator.push(

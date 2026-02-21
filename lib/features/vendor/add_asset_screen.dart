@@ -1,7 +1,6 @@
 import 'dart:developer' as developer;
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
-import 'package:eqp_rent/core/models/asset.dart';
 import 'package:eqp_rent/core/services/equipment_service.dart';
 import 'package:eqp_rent/core/services/equipment_types_service.dart';
 import 'package:eqp_rent/core/services/vendor_service.dart';
